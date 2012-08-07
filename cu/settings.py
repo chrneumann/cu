@@ -13,8 +13,8 @@ def get_local_settings():
     config = _find_local_configuration(os.getcwd())
     data = None
     if config is not None:
-        stream = open(config, 'r')
-        data = load(stream, Loader=Loader)
+        with open(config, 'r') as stream:
+            data = load(stream, Loader=Loader)
     return data
 
 
