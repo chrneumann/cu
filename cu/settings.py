@@ -8,14 +8,18 @@ except ImportError:
 
 
 def get_local_settings():
-    """Traverse current path up to the next configuration and return it.
+    """Traverse current path up to the next configuration.
+
+    Returns a tuple (path, settings) where path is the path of the
+    configuration and settings is a hash containing the parsed
+    settings.
     """
     config = _find_local_configuration(os.getcwd())
     data = None
     if config is not None:
         with open(config, 'r') as stream:
             data = load(stream, Loader=Loader)
-    return data
+    return (config, data)
 
 
 def _find_local_configuration(path):

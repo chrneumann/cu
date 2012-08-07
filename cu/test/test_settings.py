@@ -52,6 +52,7 @@ class TestGetLocalSettings(object):
                                 """)
         monkeypatch.setattr(os, 'getcwd',
                             lambda: p.join('bar').dirname)
-        config = self._uut()
+        (path, config) = self._uut()
+        assert path == p.join('.cu.yml')
         assert config['foo'] == 22
         assert len(config['bar']) == 3
