@@ -61,7 +61,7 @@ def compile_latex(path):
     """
     try:
         check_output([
-            'pdflatex',
+            'pdflatex', '-halt-on-error',
             '-output-directory=' + os.path.dirname(path),
             path])
     except CalledProcessError, e:
