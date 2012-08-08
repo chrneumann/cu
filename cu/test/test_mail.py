@@ -14,17 +14,19 @@ class TestMain(object):
         p.mkdir('bar')
         p.mkdir('letters')
         p.join('template.tex').write(
-            """
+            u"""
             \\documentclass{article}
             \\begin{document}
             Hey World!
+            \xe4
             \\end{document}
-            """)
-        p.join('.cu.yml').write("""
+            """.encode('utf-8'), 'wb')
+        p.join('.cu.yml').write(u"""
+                                foo: \xe4
                                 mail:
                                   output_path: letters
                                   latex_template: template.tex
-                                """)
+                                """.encode('utf-8'), 'wb')
         one = p.join('one.yml')
         one.write("""
                   name: Foo

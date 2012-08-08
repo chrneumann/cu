@@ -42,7 +42,7 @@ def write_letter(customer, template, output_path):
         output_path,
         customer['filename'] + '.tex')
     with open(out_path, 'w') as f:
-        f.write(rendered)
+        f.write(rendered.encode('utf-8'))
     return out_path
 
 
