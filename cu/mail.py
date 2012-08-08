@@ -18,16 +18,6 @@ from cu.customers import load_customers
 from cu.settings import get_local_settings
 
 
-latex_jinja_env = dict(
-    block_start_string='((*',
-    block_end_string='*))',
-    variable_start_string='(((',
-    variable_end_string=')))',
-    comment_start_string='((=',
-    comment_end_string='=))',
-)
-
-
 def print_letter(customer, templates, output_path):
     """Print letter.
     """
