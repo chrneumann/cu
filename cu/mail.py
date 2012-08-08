@@ -52,11 +52,15 @@ def show_pdf(path):  # pragma: no cover
 
 
 def compile_latex(path):
-    """Compile given latex file."""
+    """Compile given latex file and return the resulting PDF's path.
+    """
     check_output([
         'pdflatex',
         '-output-directory=' + os.path.dirname(path),
         path])
+    return os.path.join(
+        os.path.dirname(path),
+        os.path.splitext(os.path.basename(path))[0] + '.pdf')
 
 
 def render_latex_template(template, context):

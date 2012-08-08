@@ -1,6 +1,24 @@
 from contextlib import nested
+import os.path
 
 from mock import patch
+
+
+def test_compile_latex(tmpdir):
+    from cu.mail import compile_latex
+    tex = tmpdir.join('template.tex')
+    tex.write(
+        u"""
+        \\documentclass{article}
+        \\begin{document}
+        \xe4
+        \\end{document}
+        """.encode('utf-8'), 'wb')
+    pdf = compile_latex(os.path.join(tex.dirname, tex.basename))
+    assert os.path.isfile(pdf)
+    assert pdf == os.path.join(
+        tex.dirname,
+        os.path.splitext(tex.basename)[0] + '.pdf')
 
 
 class TestMain(object):
