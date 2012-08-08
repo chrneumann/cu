@@ -39,11 +39,19 @@ class TestMain(object):
             \xe4
             \\end{document}
             """.encode('utf-8'), 'wb')
+        p.join('template2.tex').write(
+            u"""
+            \\documentclass{article}
+            \\begin{document}
+            More World!
+            \\end{document}
+            """.encode('utf-8'), 'wb')
         p.join('.cu.yml').write(u"""
                                 foo: \xe4
                                 mail:
                                   output_path: letters
-                                  latex_template: template.tex
+                                  latex_templates: [template.tex,
+                                    template2.tex]
                                 """.encode('utf-8'), 'wb')
         one = p.join('one.yml')
         one.write("""
@@ -63,5 +71,7 @@ class TestMain(object):
             self._uut()
 
         assert pdf_mock.called
-        assert p.join('letters', 'one.pdf').check()
-        assert p.join('letters', 'two.pdf').check()
+        assert p.join('letters', 'one_template.pdf').check()
+        assert p.join('letters', 'one_template2.pdf').check()
+        assert p.join('letters', 'two_template.pdf').check()
+        assert p.join('letters', 'two_template2.pdf').check()

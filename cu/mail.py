@@ -4,6 +4,7 @@ Send letters and e-mails to customers.
 
 import os.path
 from subprocess import (
+    CalledProcessError,
     check_call,
     check_output,
 )
@@ -26,21 +27,25 @@ latex_jinja_env = dict(
 )
 
 
-def print_letter(customer, template, output_path):
+def print_letter(customer, templates, output_path):
     """Print letter.
     """
-    tex = write_letter(customer, template, output_path)
-    pdf = compile_latex(tex)
-    show_pdf(pdf)
+    pdfs = []
+    for template in templates:
+        tex = write_letter(customer, template, output_path)
+        pdfs.append(compile_latex(tex))
+    for pdf in pdfs:
+        show_pdf(pdf)
 
 
 def write_letter(customer, template, output_path):
     """Render letter, write to file and return filename.
     """
     rendered = render_latex_template(template, customer)
+    template_name = os.path.splitext(os.path.basename(template))[0]
     out_path = os.path.join(
         output_path,
-        customer['filename'] + '.tex')
+        customer['filename'] + '_' + template_name + '.tex')
     with open(out_path, 'w') as f:
         f.write(rendered.encode('utf-8'))
     return out_path
@@ -54,10 +59,14 @@ def show_pdf(path):  # pragma: no cover
 def compile_latex(path):
     """Compile given latex file and return the resulting PDF's path.
     """
-    check_output([
-        'pdflatex',
-        '-output-directory=' + os.path.dirname(path),
-        path])
+    try:
+        check_output([
+            'pdflatex',
+            '-output-directory=' + os.path.dirname(path),
+            path])
+    except CalledProcessError, e:
+        print sys.stderr, e.output
+        raise
     return os.path.join(
         os.path.dirname(path),
         os.path.splitext(os.path.basename(path))[0] + '.pdf')
@@ -94,10 +103,11 @@ def main():
 
     if arguments['print-letter']:
         for customer in customers:
-            template = os.path.join(
-                basedir,
-                settings['mail']['latex_template'])
+            templates = []
+            for template in settings['mail']['latex_templates']:
+                templates.append(os.path.join(
+                    basedir, template))
             output_path = os.path.join(
                 basedir,
                 settings['mail']['output_path'])
-            print_letter(customer, template, output_path)
+            print_letter(customer, templates, output_path)
