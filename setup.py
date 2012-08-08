@@ -12,7 +12,7 @@ except IOError:
 
 install_requires = [
     'docopt',
-    'jinja2',
+    'mako',
     'pyyaml',
     ]
 

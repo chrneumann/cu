@@ -11,7 +11,7 @@ from subprocess import (
 import sys
 
 from docopt import docopt
-import jinja2
+from mako.template import Template
 
 from cu.customers import load_customers
 from cu.settings import get_local_settings
@@ -72,15 +72,9 @@ def compile_latex(path):
         os.path.splitext(os.path.basename(path))[0] + '.pdf')
 
 
-def render_latex_template(template, context):
-    env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(
-            os.path.dirname(template)
-        ),
-        **latex_jinja_env
-    )
-    template = env.get_template(os.path.basename(template))
-    return template.render(**context)
+def render_latex_template(path, context):
+    template = Template(filename=path)
+    return template.render_unicode(**context)
 
 
 def main():

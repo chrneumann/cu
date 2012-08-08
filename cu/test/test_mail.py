@@ -32,10 +32,10 @@ class TestMain(object):
         p.mkdir('bar')
         p.mkdir('letters')
         p.join('template.tex').write(
-            u"""
+            u"""## -*- coding: utf-8 -*-
             \\documentclass{article}
             \\begin{document}
-            Hey World!
+            Hey ${'World'}!
             \xe4
             \\end{document}
             """.encode('utf-8'), 'wb')
