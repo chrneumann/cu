@@ -12,6 +12,7 @@ import sys
 
 from docopt import docopt
 from mako.template import Template
+import mako.exceptions
 
 from cu.customers import load_customers
 from cu.settings import get_local_settings
@@ -73,8 +74,12 @@ def compile_latex(path):
 
 
 def render_latex_template(path, context):
-    template = Template(filename=path)
-    return template.render_unicode(**context)
+    try:
+        template = Template(filename=path)
+        return template.render_unicode(**context)
+    except:
+        print mako.exceptions.text_error_template().render()
+        raise
 
 
 def main():
