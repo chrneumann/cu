@@ -12,7 +12,7 @@ def load_customers(basedir, files):
     customers = []
     for path in files:
         path = os.path.join(basedir, path)
-        with open(path, 'r') as stream:
+        with file(path, 'r') as stream:
             data = load(stream, Loader=Loader)
             data['filename'] = os.path.splitext(os.path.basename(path))[0]
         customers.append(data)
