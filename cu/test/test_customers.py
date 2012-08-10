@@ -1,3 +1,4 @@
+from mock import patch
 import os.path
 
 
@@ -19,10 +20,12 @@ class TestLoadCustomers(object):
             """
             name: "United Profit"
             """)
-        customers = self._uut(
-            os.path.join(p.dirname, p.basename),
-            [os.path.join(petes.dirname, petes.basename),
-             os.path.join(up.dirname, up.basename)])
+        with patch('os.getcwd') as cwd_mock:
+            cwd_mock.return_value = os.path.join(p.dirname, p.basename)
+            customers = self._uut(
+                [os.path.join(petes.dirname, petes.basename),
+                 os.path.join(up.dirname, up.basename)])
+        cwd_mock.assert_called()
         assert len(customers) == 2
         assert customers[0]['name'] == "Pete's Flasks"
         assert customers[0]['filename'] == "petes_flasks"

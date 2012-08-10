@@ -1,3 +1,4 @@
+import os
 import os.path
 from yaml import load
 try:
@@ -6,12 +7,14 @@ except ImportError:
     from yaml import Loader
 
 
-def load_customers(basedir, files):
-    """Load customer data from given paths.
+def load_customers(paths):
+    """Load customer data from given YAML file paths.
+
+    Paths may be absolute or working directory relative.
     """
     customers = []
-    for path in files:
-        path = os.path.join(basedir, path)
+    for path in paths:
+        path = os.path.join(os.getcwd(), path)
         with file(path, 'r') as stream:
             data = load(stream, Loader=Loader)
             data['filename'] = os.path.splitext(os.path.basename(path))[0]

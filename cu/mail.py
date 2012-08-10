@@ -125,7 +125,7 @@ def main():
     arguments = docopt(__doc__, sys.argv[1:])
     (path, settings) = get_local_settings()
     basedir = os.path.dirname(path)
-    customers = load_customers(basedir, arguments['<customer>'])
+    customers = load_customers(arguments['<customer>'])
 
     if arguments['print-letter']:
         for customer in customers:
